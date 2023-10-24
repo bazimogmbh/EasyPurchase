@@ -50,18 +50,18 @@ public final class EasyPurchase: ObservableObject {
         SwiftyStoreKit.restorePurchases(atomically: true) { results in
             if results.restoreFailedPurchases.count > 0 {
                 DispatchQueue.main.async {
-                    completion(false, "Restore Failed")
+                    completion(false, "Restore Failed"~)
                 }
             } else if results.restoredPurchases.count > 0 {
                 self.receiptValidation { (receipt) in
                     DispatchQueue.main.async {
                         let success = receipt != nil
-                        completion(success, success ? "Restore is successful" : "Nothing to Restore")
+                        completion(success, success ? "Restore is successful"~ : "Nothing to Restore"~)
                     }
                 }
             } else {
                 DispatchQueue.main.async {
-                    completion(false, "Nothing to Restore")
+                    completion(false, "Nothing to Restore"~)
                 }
             }
         }
@@ -78,13 +78,13 @@ public final class EasyPurchase: ObservableObject {
                     
                     DispatchQueue.main.async {
                         let success = receipt != nil
-                        completion(success, success ? "Purchase Succeeded" : "Recipient Validation Failed")
+                        completion(success, success ? "Purchase Succeeded"~ : "Recipient Validation Failed"~)
                     }
                 }
                 
             case .deferred(purchase: _):
                 DispatchQueue.main.async {
-                    completion(false, "Your purchase is pending approval")
+                    completion(false, "Your purchase is pending approval"~)
                 }
                 
             case .error(let error):
@@ -207,15 +207,15 @@ public final class EasyPurchase: ObservableObject {
 fileprivate extension SKError {
     var errorMessage: String {
         switch self.code {
-        case .unknown: return "Unknown error. Please contact support"
-        case .clientInvalid: return "Not allowed to make the payment"
-        case .paymentCancelled: return "Payment cancelled"
-        case .paymentInvalid: return "The purchase identifier was invalid"
-        case .paymentNotAllowed: return "The device is not allowed to make the payment"
-        case .storeProductNotAvailable: return "The product is not available in the current storefront"
-        case .cloudServicePermissionDenied: return "Access to cloud service information is not allowed"
-        case .cloudServiceNetworkConnectionFailed: return "Could not connect to the network"
-        case .cloudServiceRevoked: return "User has revoked permission to use this cloud service"
+        case .unknown: return "Unknown error. Please contact support"~
+        case .clientInvalid: return "Not allowed to make the payment"~
+        case .paymentCancelled: return "Payment cancelled"~
+        case .paymentInvalid: return "The purchase identifier was invalid"~
+        case .paymentNotAllowed: return "The device is not allowed to make the payment"~
+        case .storeProductNotAvailable: return "The product is not available in the current storefront"~
+        case .cloudServicePermissionDenied: return "Access to cloud service information is not allowed"~
+        case .cloudServiceNetworkConnectionFailed: return "Could not connect to the network"~
+        case .cloudServiceRevoked: return "User has revoked permission to use this cloud service"~
         default: return (self as NSError).localizedDescription
         }
     }

@@ -5,6 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "EasyPurchase",
+    defaultLocalization: "en",
     platforms: [
         .iOS(.v15),
         .macOS(.v12)
