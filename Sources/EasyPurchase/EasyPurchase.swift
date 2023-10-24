@@ -14,7 +14,8 @@ public final class EasyPurchase: ObservableObject {
     
     @Published public var isSubscribed: Bool = false
     @Published public var isLifetimeSubscription: Bool = false
-    @Published public var products: [SKProduct]?
+    @Published public var offers: [Offer] = []
+    @Published public var lifetimeOffers: Offer?
     
     private var secretKey: String = ""
     private var lifetimeProductId: String?
@@ -109,7 +110,15 @@ public final class EasyPurchase: ObservableObject {
                 }
                 
                 DispatchQueue.main.async {
-                    self.products = Array(allProducts)
+                    let offers = self.productIds.compactMap { productId in
+                        if let product = allProducts.first(where: { $0.productIdentifier == productId }) {
+                            return Offer(productId: productId, product: product, isLifetime: productId == self.lifetimeProductId)
+                        } else {
+                            return nil
+                        }
+                    }
+        
+                    self.offers = offers
                 }
                 
                 Tracker.updatePurchases(of: allProducts)
