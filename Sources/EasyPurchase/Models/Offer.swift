@@ -14,11 +14,13 @@ public struct Offer: Equatable, Identifiable {
     
     public private(set) var productId: String
     public private(set) var product: SKProduct
+    public private(set) var isDefaultOffer: Bool
     public private(set) var isLifetime: Bool
     
-    public init(productId: String, product: SKProduct, isLifetime: Bool = false) {
+    public init(productId: String, product: SKProduct, isDefaultOffer: Bool, isLifetime: Bool = false) {
         self.productId = productId
         self.product = product
+        self.isDefaultOffer = isDefaultOffer
         self.isLifetime = isLifetime
     }
 }

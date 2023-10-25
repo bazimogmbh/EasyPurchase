@@ -19,6 +19,7 @@ public final class EasyPurchase: ObservableObject {
     
     private var secretKey: String = ""
     private var lifetimeProductId: String?
+    private var defaultOfferId: String?
     private var offerIds = [String]()
     private var allProductIds = [String]()
     
@@ -28,6 +29,7 @@ public final class EasyPurchase: ObservableObject {
         appstoreId: String,
         secretKey: String,
         lifetimeProductId: String?,
+        defaultOfferId: String,
         offerIds: [String],
         allProductIds: [String]
     ) {
@@ -37,6 +39,7 @@ public final class EasyPurchase: ObservableObject {
         self.isLifetimeSubscription = (Storage.getFromDefaults(.isLifetimeSubscription) ?? false)
         self.secretKey = secretKey
         self.lifetimeProductId = lifetimeProductId
+        self.defaultOfferId = defaultOfferId
         self.offerIds = offerIds
         self.allProductIds = allProductIds
         
@@ -115,7 +118,10 @@ public final class EasyPurchase: ObservableObject {
                 DispatchQueue.main.async {
                     let offers = self.offerIds.compactMap { productId in
                         if let product = allProducts.first(where: { $0.productIdentifier == productId }) {
-                            return Offer(productId: productId, product: product, isLifetime: productId == self.lifetimeProductId)
+                            return Offer(productId: productId,
+                                         product: product,
+                                         isDefaultOffer: productId == self.defaultOfferId,
+                                         isLifetime: productId == self.lifetimeProductId)
                         } else {
                             return nil
                         }
