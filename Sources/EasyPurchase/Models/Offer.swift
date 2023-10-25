@@ -10,9 +10,7 @@ import StoreKit
 import SwiftyStoreKit
 
 public struct Offer: Equatable, Identifiable {
-    public var id: String {
-        productId
-    }
+    public var id: String = UUID().uuidString
     
     public private(set) var productId: String
     public private(set) var product: SKProduct
@@ -30,16 +28,6 @@ public extension Offer {
         localize(product.subscriptionPeriod) ?? ""
     }
     
-    var days: Int? {
-        switch product.subscriptionPeriod?.unit {
-        case .day: return 1
-        case .week: return 7
-        case .month: return 30
-        case .year: return 365
-        default: return nil
-        }
-    }
-    
     var localizedPrice: String? {
         product.localizedPrice
     }
@@ -54,6 +42,16 @@ public extension Offer {
     
     var trialPeriod: String? {
         localize(product.introductoryPrice?.subscriptionPeriod)
+    }
+    
+    private var days: Int? {
+        switch product.subscriptionPeriod?.unit {
+        case .day: return 1
+        case .week: return 7
+        case .month: return 30
+        case .year: return 365
+        default: return nil
+        }
     }
     
     func discount(to baseOffer: Offer) -> Int? {
