@@ -488,23 +488,6 @@
         }
       }
     },
-    "Unknown subscription period" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unknown subscription period"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Невідомий період підписки"
-          }
-        }
-      }
-    },
     "User has revoked permission to use this cloud service" : {
       "localizations" : {
         "en" : {

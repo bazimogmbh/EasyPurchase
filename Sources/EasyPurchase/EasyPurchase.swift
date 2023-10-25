@@ -15,7 +15,6 @@ public final class EasyPurchase: ObservableObject {
     @Published public var isSubscribed: Bool = false
     @Published public var isLifetimeSubscription: Bool = false
     @Published public var offers: [Offer] = []
-    @Published public var lifetimeOffers: Offer?
     
     private var secretKey: String = ""
     private var lifetimeProductId: String?
