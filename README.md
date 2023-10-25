@@ -37,5 +37,7 @@ EasyPurchase.shared.configure(
     allProductIds: [Array of all product IDs that give a subscription to the user]
 )
 
+```
+
 ## Contact
 If you have any questions, issues, or suggestions regarding EasyPurchase, please create an issue on GitHub or contact us at jenya.korsun@gmail.com.
