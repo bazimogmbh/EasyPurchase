@@ -12,8 +12,8 @@ EasyPurchase is a Swift package that simplifies the implementation of purchase l
 
 - `configure(appstoreId: String, secretKey: String, lifetimeProductId: String?, defaultOfferId: String, offerIds: [String], allProductIds: [String])`: Configure EasyPurchase with the necessary parameters, including the App Store ID, secret key, product identifiers, and other settings.
 - `restorePurchase(completion: @escaping (_ success: Bool, _ message: String) -> Void)`: Restore a previous purchase, if any, and call the provided completion handler with the results.
-- `purchase(offer: Offer, completion: @escaping (_ success: Bool, _ message: String) -> Void)`: Initiate a purchase for a specific offer and handle the result through the completion handler.
-- `purchase(productId: String, completion: @escaping (_ success: Bool, _ message: String) -> Void)`: Initiate a purchase for a specific product by its identifier and handle the result through the completion handler.
+- `purchase(_ offer: Offer, completion: @escaping (_ success: Bool, _ message: String) -> Void)`: Initiate a purchase for a specific offer and handle the result through the completion handler.
+- `purchase(_ productId: String, completion: @escaping (_ success: Bool, _ message: String) -> Void)`: Initiate a purchase for a specific product by its identifier and handle the result through the completion handler.
 
 ## Getting Started
 
