@@ -280,54 +280,6 @@
         }
       }
     },
-    "Access to cloud service information is not allowed" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Access to cloud service information is not allowed"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Доступ до інформації хмарного сервісу не дозволено"
-          }
-        }
-      }
-    },
-    "Could not connect to the network" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Could not connect to the network"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Неможливо підключитися до мережі"
-          }
-        }
-      }
-    },
-    "Not allowed to make the payment" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Not allowed to make the payment"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Заборонено здійснювати оплату"
-          }
-        }
-      }
-    },
     "Nothing to Restore" : {
       "localizations" : {
         "en" : {
@@ -340,22 +292,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Немає чого відновлювати"
-          }
-        }
-      }
-    },
-    "Payment cancelled" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Payment cancelled"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Оплата скасована"
           }
         }
       }
@@ -420,86 +356,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Відновлення виконано успішно"
-          }
-        }
-      }
-    },
-    "The device is not allowed to make the payment" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The device is not allowed to make the payment"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Заборонено здійснювати оплату на даному девайсі"
-          }
-        }
-      }
-    },
-    "The product is not available in the current storefront" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The product is not available in the current storefront"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Продукт недоступний"
-          }
-        }
-      }
-    },
-    "The purchase identifier was invalid" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The purchase identifier was invalid"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Недійсний ідентифікатор покупки"
-          }
-        }
-      }
-    },
-    "Unknown error. Please contact support" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unknown error. Please contact support"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Невідома помилка. Зверніться до служби підтримки"
-          }
-        }
-      }
-    },
-    "User has revoked permission to use this cloud service" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "User has revoked permission to use this cloud service"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Користувач скасував дозвіл на використання хмарного сервісу."
           }
         }
       }
