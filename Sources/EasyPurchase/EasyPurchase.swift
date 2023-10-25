@@ -74,6 +74,10 @@ public final class EasyPurchase: ObservableObject {
         }
     }
     
+    public func purchase(_ offer: Offer, completion: @escaping (_ success: Bool, _ message: String)  -> Void) {
+        purchase(offer.productId, completion: completion)
+    }
+    
     public func purchase(_ productId: String, completion: @escaping (_ success: Bool, _ message: String)  -> Void) {
         print("EasyPurchase purchasing product with id: \(productId)")
         
