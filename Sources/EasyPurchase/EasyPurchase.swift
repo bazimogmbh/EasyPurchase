@@ -19,15 +19,17 @@ public final class EasyPurchase: ObservableObject {
     
     private var secretKey: String = ""
     private var lifetimeProductId: String?
-    private var productIds = [String]()
+    private var offerIds = [String]()
+    private var allProductIds = [String]()
     
     private init() { }
     
     public func configure(
-        with appstoreId: String,
+        appstoreId: String,
         secretKey: String,
         lifetimeProductId: String?,
-        productIds: [String]
+        offerIds: [String],
+        allProductIds: [String]
     ) {
         Tracker.configure(with: appstoreId)
         
@@ -35,7 +37,8 @@ public final class EasyPurchase: ObservableObject {
         self.isLifetimeSubscription = (Storage.getFromDefaults(.isLifetimeSubscription) ?? false)
         self.secretKey = secretKey
         self.lifetimeProductId = lifetimeProductId
-        self.productIds = productIds
+        self.offerIds = offerIds
+        self.allProductIds = allProductIds
         
         getProducts()
         completeTransactions()
@@ -97,7 +100,7 @@ public final class EasyPurchase: ObservableObject {
     }
     
     private func getProducts() {
-        SwiftyStoreKit.retrieveProductsInfo(Set(productIds)) { result in
+        SwiftyStoreKit.retrieveProductsInfo(Set(offerIds)) { result in
             guard result.error == nil else {
                 print("EasyPurchase Error: \(String(describing: result.error))")
                 return
@@ -110,7 +113,7 @@ public final class EasyPurchase: ObservableObject {
                 }
                 
                 DispatchQueue.main.async {
-                    let offers = self.productIds.compactMap { productId in
+                    let offers = self.offerIds.compactMap { productId in
                         if let product = allProducts.first(where: { $0.productIdentifier == productId }) {
                             return Offer(productId: productId, product: product, isLifetime: productId == self.lifetimeProductId)
                         } else {
@@ -161,7 +164,7 @@ public final class EasyPurchase: ObservableObject {
                 // Verify the subscriptions
                 let subscriptionResult = SwiftyStoreKit.verifySubscriptions(
                     ofType: .autoRenewable,
-                    productIds: Set(self.productIds),
+                    productIds: Set(self.allProductIds),
                     inReceipt: receipt
                 )
                 
