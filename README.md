@@ -32,7 +32,7 @@ EasyPurchase.shared.configure(
     appstoreId: "yourAppStoreID",
     secretKey: "yourSecretKey",
     lifetimeProductId: "yourLifetimeProductId",
-    defaultOfferId: "product Id of project tha will be selected by defaults",
+    defaultOfferId: "product Id tha will be selected by defaults",
     offerIds: [Array of product IDs you want to show in an offer to the user],
     allProductIds: [Array of all product IDs that give a subscription to the user]
 )
