@@ -47,13 +47,21 @@ public extension Offer {
     }
     
     private var days: Int? {
-        switch product.subscriptionPeriod?.unit {
-        case .day: return 1
-        case .week: return 7
-        case .month: return 30
-        case .year: return 365
-        default: return nil
+        guard let duration = product.subscriptionPeriod?.numberOfUnits,
+              let days: Int = {
+                  switch product.subscriptionPeriod?.unit {
+                  case .day: return 1
+                  case .week: return 7
+                  case .month: return 30
+                  case .year: return 365
+                  default: return nil
+                  }
+              }()
+        else {
+            return nil
         }
+        
+        return duration * days
     }
     
     func discount(to baseOffer: Offer) -> Int? {
