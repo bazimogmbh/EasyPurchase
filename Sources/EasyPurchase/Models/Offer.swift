@@ -70,7 +70,7 @@ public extension Offer {
             return nil
         }
         
-        let discount = 1.0 - (baseOffer.priceInDouble / Double(baseOfferDays)) / (self.priceInDouble / Double(selfDays))
+        let discount = 1.0 - (self.priceInDouble / Double(selfDays)) / (baseOffer.priceInDouble / Double(baseOfferDays))
         return Int(discount * 100.0)
     }
     
