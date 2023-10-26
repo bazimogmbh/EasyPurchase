@@ -125,7 +125,6 @@ public final class EasyPurchase: ObservableObject {
                         if let product = allProducts.first(where: { $0.productIdentifier == productId }) {
                             return Offer(productId: productId,
                                          product: product,
-                                         isDefaultOffer: productId == self.defaultOfferId,
                                          isLifetime: productId == self.lifetimeProductId)
                         } else {
                             return nil
