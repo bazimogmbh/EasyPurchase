@@ -7,6 +7,7 @@ EasyPurchase is a Swift package that simplifies the implementation of purchase l
 - `isSubscribed` (Bool): A published property that indicates whether the user is currently subscribed.
 - `isLifetimeSubscription` (Bool): A published property that indicates whether the user has a lifetime subscription.
 - `offers` ([Offer]): A published array of available offers.
+- `defaultOffer` (Offer): A property that indicates default offer(first selected offer from offers).
 
 ### Public Functions
 
@@ -32,7 +33,7 @@ EasyPurchase.shared.configure(
     appstoreId: "yourAppStoreID",
     secretKey: "yourSecretKey",
     lifetimeProductId: "yourLifetimeProductId",
-    defaultOfferId: "product Id tha will be selected by defaults",
+    defaultOfferId: "product Id that will be selected by defaults",
     offerIds: [Array of product IDs you want to show in an offer to the user],
     allProductIds: [Array of all product IDs that give a subscription to the user]
 )

@@ -16,6 +16,8 @@ public final class EasyPurchase: ObservableObject {
     @Published public var isLifetimeSubscription: Bool = false
     @Published public var offers: [Offer] = []
     
+    public var defaultOffer: Offer?
+    
     private var secretKey: String = ""
     private var lifetimeProductId: String?
     private var defaultOfferId: String?
@@ -118,7 +120,7 @@ public final class EasyPurchase: ObservableObject {
                     print("EasyPurchase Product: \(product.localizedTitle), Price: \(product.localizedPrice ?? ""), Description: \(product.localizedDescription)")
                 }
                 
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [self] in
                     let offers = self.offerIds.compactMap { productId in
                         if let product = allProducts.first(where: { $0.productIdentifier == productId }) {
                             return Offer(productId: productId,
@@ -131,6 +133,7 @@ public final class EasyPurchase: ObservableObject {
                     }
         
                     self.offers = offers
+                    self.defaultOffer = offers.first(where: { $0.productId == self.defaultOfferId }) ?? offers.first
                 }
                 
                 Tracker.updatePurchases(of: allProducts)
