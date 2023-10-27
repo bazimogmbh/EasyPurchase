@@ -28,7 +28,7 @@ public struct Offer: Equatable, Identifiable {
 }
 
 public extension Offer {
-    func dummy(with productId: String) -> Offer {
+    static func dummy(with productId: String) -> Offer {
         Offer(productId: productId)
     }
 }
