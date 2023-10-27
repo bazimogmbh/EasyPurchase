@@ -22,6 +22,7 @@ EasyPurchase is a Swift package that simplifies the implementation of purchase l
 2. Import the EasyPurchase framework into your code.
 3. Configure EasyPurchase with the necessary parameters using the `configure` function, including your App Store ID, secret key, and other relevant settings.
 4. Use the provided properties and functions to manage purchase logic in your app.
+5. IMPORTANT! Add "Privacy - Tracking Usage Description" to your info.plist file.
 
 ## Example Usage
 
