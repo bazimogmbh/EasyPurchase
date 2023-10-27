@@ -10,7 +10,9 @@ import StoreKit
 import SwiftyStoreKit
 
 public struct Offer: Equatable, Identifiable {
-    public var id: String = UUID().uuidString
+    public var id: String {
+        productId
+    }
     
     public private(set) var productId: String
     public private(set) var product: SKProduct?
