@@ -13,39 +13,50 @@ public struct Offer: Equatable, Identifiable {
     public var id: String = UUID().uuidString
     
     public private(set) var productId: String
-    public private(set) var product: SKProduct
-    public private(set) var isLifetime: Bool
+    public private(set) var product: SKProduct?
+    public private(set) var isLifetime: Bool = false
     
     public init(productId: String, product: SKProduct, isLifetime: Bool = false) {
         self.productId = productId
         self.product = product
         self.isLifetime = isLifetime
     }
+    
+    init(productId: String) {
+        self.productId = productId
+    }
+}
+
+public extension Offer {
+    func dummy(with productId: String) -> Offer {
+        Offer(productId: productId)
+    }
 }
 
 public extension Offer {
     var period: String {
-        localize(product.subscriptionPeriod) ?? ""
+        localize(product?.subscriptionPeriod) ?? ""
     }
     
     var localizedPrice: String? {
-        product.localizedPrice
+        product?.localizedPrice
     }
     
-    var priceInDouble: Double {
-        product.price.doubleValue
+    var priceInDouble: Double? {
+        product?.price.doubleValue
     }
     
     var trialPeriodNumber: Int? {
-        product.introductoryPrice?.subscriptionPeriod.numberOfUnits
+        product?.introductoryPrice?.subscriptionPeriod.numberOfUnits
     }
     
     var trialPeriod: String? {
-        localize(product.introductoryPrice?.subscriptionPeriod)
+        localize(product?.introductoryPrice?.subscriptionPeriod)
     }
     
     private var days: Int? {
-        guard let duration = product.subscriptionPeriod?.numberOfUnits,
+        guard let product,
+              let duration = product.subscriptionPeriod?.numberOfUnits,
               let days: Int = {
                   switch product.subscriptionPeriod?.unit {
                   case .day: return 1
@@ -64,11 +75,14 @@ public extension Offer {
     
     func discount(to baseOffer: Offer) -> Int? {
         guard let baseOfferDays = baseOffer.days,
-              let selfDays = self.days else {
+              let selfDays = self.days,
+              let selfPriceInDouble = self.priceInDouble,
+              let baseOfferPriceInDouble = baseOffer.priceInDouble
+        else {
             return nil
         }
         
-        let discount = 1.0 - (self.priceInDouble / Double(selfDays)) / (baseOffer.priceInDouble / Double(baseOfferDays))
+        let discount = 1.0 - (selfPriceInDouble / Double(selfDays)) / (baseOfferPriceInDouble / Double(baseOfferDays))
         return Int(discount * 100.0)
     }
     
