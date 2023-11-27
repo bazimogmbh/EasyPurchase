@@ -98,7 +98,7 @@ public extension Offer {
             switch unit {
             case .day: "\(numberOfUnits) days"~
             case .week: "\(numberOfUnits) weeks"~
-            case .month: "\(numberOfUnits) months"~
+            case .month: "%lld months".localize(with: [numberOfUnits]) //"\(numberOfUnits) months"~
             case .year: "\(numberOfUnits) years"~
             default: "lifetime"~
             }

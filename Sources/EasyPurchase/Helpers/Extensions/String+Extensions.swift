@@ -13,3 +13,9 @@ extension String.LocalizationValue {
         String(localized: string)
     }
 }
+
+extension String {
+    func localize(with arguments: [CVarArg]) -> String {
+        return String(format: self, locale: nil, arguments: arguments)
+    }
+}
