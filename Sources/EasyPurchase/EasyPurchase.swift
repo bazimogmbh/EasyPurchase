@@ -46,11 +46,9 @@ public final class EasyPurchase: ObservableObject {
         getProducts()
         completeTransactions()
         
-#if !DEBUG
         receiptValidation { _ in
             
         }
-#endif
     }
     
     public func restorePurchase(completion: @escaping (_ success: Bool, _ message: String) -> Void) {
