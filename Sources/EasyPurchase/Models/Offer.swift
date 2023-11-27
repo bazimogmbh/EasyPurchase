@@ -92,7 +92,7 @@ public extension Offer {
         guard let period else { return nil }
         
         let unit = period.unit
-        let numberOfUnits = period.numberOfUnits
+        let numberOfUnits: Int = period.numberOfUnits
         
         var localizedPeriod = {
             switch unit {
@@ -100,7 +100,7 @@ public extension Offer {
             case .week: "\(numberOfUnits) weeks"~
             case .month: "\(numberOfUnits) months"~
             case .year: "\(numberOfUnits) years"~
-            default: ""
+            default: "lifetime"~
             }
         }()
         
