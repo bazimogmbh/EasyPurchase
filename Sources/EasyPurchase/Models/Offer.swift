@@ -103,11 +103,7 @@ public extension Offer {
             default: "lifetime"~
             }
         }()
-        
-        if numberOfUnits == 1 {
-            localizedPeriod = localizedPeriod.replacingOccurrences(of: "\(1) ", with: "")
-        }
-        
+
         return localizedPeriod
     }
 }
