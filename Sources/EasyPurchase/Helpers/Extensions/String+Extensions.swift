@@ -8,6 +8,12 @@
 import Foundation
 
 postfix operator ~
-postfix func ~(string: String) -> String {
-    return NSLocalizedString(string, bundle: Bundle(for: EasyPurchase.self), comment: "")
+//postfix func ~(string: String) -> String {
+//    return NSLocalizedString(string, bundle: Bundle(for: EasyPurchase.self), comment: "")
+//}
+
+extension String.LocalizationValue {
+    static postfix func ~(string: String.LocalizationValue) -> String {
+        String(localized: string, bundle: Bundle(for: EasyPurchase.self))
+    }
 }
