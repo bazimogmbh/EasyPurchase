@@ -8,14 +8,7 @@
 import Foundation
 
 postfix operator ~
-extension String.LocalizationValue {
-    static postfix func ~(string: String.LocalizationValue) -> String {
-        String(localized: string)
-    }
-}
-
-extension String {
-    func localize(with arguments: [CVarArg]) -> String {
-        return String(format: self, locale: nil, arguments: arguments)
-    }
+postfix func ~(string: String) -> String {
+    
+    return NSLocalizedString(string, bundle: .module, comment: "")
 }
