@@ -94,15 +94,19 @@ public extension Offer {
         let unit = period.unit
         let numberOfUnits = period.numberOfUnits
         
-        let localizedPeriod = {
+        var localizedPeriod = {
             switch unit {
             case .day: "\(numberOfUnits) days"~
             case .week: "\(numberOfUnits) weeks"~
             case .month: "\(numberOfUnits) months"~
             case .year: "\(numberOfUnits) years"~
-            default: ""~
+            default: ""
             }
         }()
+        
+        if numberOfUnits == 1 {
+            localizedPeriod = localizedPeriod.replacingOccurrences(of: "\(1) ", with: "")
+        }
         
         return localizedPeriod
     }
