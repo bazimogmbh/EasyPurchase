@@ -174,50 +174,49 @@ public final class EasyPurchase: ObservableObject {
 // MARK: - Restore
 
 public extension EasyPurchase {
-    func restorePurchasesWithResult() async -> RestoreResults {
+    enum RestoreResultsState {
+        case restored
+        case failed(Error?)
+    }
+    
+    func restorePurchasesWithResult() async -> RestoreResultsState {
         await withCheckedContinuation { continuation in
-            restorePurchase { result, _, _ in
+            restorePurchasesWithResult { result in
                 continuation.resume(returning: result)
             }
         }
     }
     
-    func restorePurchasesWithResult(completion: @escaping (_ result: RestoreResults) -> Void) {
-        restorePurchase { result, _, _ in
-            completion(result)
+    func restorePurchasesWithResult(completion: @escaping (_ result: RestoreResultsState) -> Void) {
+        restorePurchase { success, message in
+            completion(success ? .restored : .failed(message))
         }
     }
     
     func restorePurchases() async -> (success: Bool, message: String) {
         await withCheckedContinuation { continuation in
-            restorePurchase { _, success, message in
+            restorePurchase { success, message in
                 continuation.resume(returning: (success, message))
             }
         }
     }
-    
+
     func restorePurchase(completion: @escaping (_ success: Bool, _ message: String) -> Void) {
-        restorePurchase { _, success, message in
-            completion(success, message)
-        }
-    }
-    
-    private func restorePurchase(completion: @escaping (_ result: RestoreResults, _ success: Bool, _ message: String) -> Void) {
         SwiftyStoreKit.restorePurchases(atomically: true) { results in
             if results.restoreFailedPurchases.count > 0 {
                 DispatchQueue.main.async {
-                    completion(results, false, "Restore Failed"~)
+                    completion(false, "Restore Failed"~)
                 }
             } else if results.restoredPurchases.count > 0 {
                 self.receiptValidation { (receipt) in
                     DispatchQueue.main.async {
                         let success = receipt != nil
-                        completion(results, success, success ? "Restore is successful"~ : "Nothing to Restore"~)
+                        completion(success, success ? "Restore is successful"~ : "Nothing to Restore"~)
                     }
                 }
             } else {
                 DispatchQueue.main.async {
-                    completion(results, false, "Nothing to Restore"~)
+                    completion(false, "Nothing to Restore"~)
                 }
             }
         }
@@ -227,7 +226,15 @@ public extension EasyPurchase {
 // MARK: - Purchase
 
 public extension EasyPurchase {
-    func purchase(product: SKProduct) async -> PurchaseResult {
+    enum PurchaseResultsState {
+        case cancelled
+        case purchased
+        case restored
+        case pending
+        case failed(Error)
+    }
+    
+    func purchase(product: SKProduct) async -> PurchaseResultsState {
         await withCheckedContinuation { continuation in
             purchase(product.productIdentifier) { result, _, _ in
                 continuation.resume(returning: result)
@@ -257,7 +264,7 @@ public extension EasyPurchase {
         }
     }
     
-    private func purchase(_ productId: String, completion: @escaping (_ result: PurchaseResult, _ success: Bool, _ message: String)  -> Void) {
+    private func purchase(_ productId: String, completion: @escaping (_ result: PurchaseResultsState, _ success: Bool, _ message: String)  -> Void) {
         print("EasyPurchase purchasing product with id: \(productId)")
         
         SwiftyStoreKit.purchaseProduct(productId, quantity: 1, atomically: true) { result in
@@ -268,18 +275,22 @@ public extension EasyPurchase {
                     
                     DispatchQueue.main.async {
                         let success = receipt != nil
-                        completion(result, success, success ? "Purchase Succeeded"~ : "Recipient Validation Failed"~)
+                        if success {
+                            completion(.purchased, success, "Purchase Succeeded"~)
+                        } else {
+                            completion(.failed("Recipient Validation Failed"~), success, "Recipient Validation Failed"~)
+                        }
                     }
                 }
                 
             case .deferred(purchase: _):
                 DispatchQueue.main.async {
-                    completion(result, false, "Your purchase is pending approval"~)
+                    completion(.pending, false, "Your purchase is pending approval"~)
                 }
                 
             case .error(let error):
                 DispatchQueue.main.async {
-                    completion(result, false, error.errorMessage)
+                    completion(.failed(error), false, error.errorMessage)
                 }
             }
         }
@@ -301,4 +312,8 @@ fileprivate extension SKError {
         default: return (self as NSError).localizedDescription
         }
     }
+}
+
+extension String: Error {
+    
 }
