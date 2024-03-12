@@ -9,6 +9,7 @@ import Foundation
 import StoreKit
 import SwiftyStoreKit
 
+@MainActor
 public final class EasyPurchase: ObservableObject {
     public static let shared = EasyPurchase()
     
