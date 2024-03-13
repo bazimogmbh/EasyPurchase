@@ -271,12 +271,13 @@ public extension EasyPurchase {
     private func purchase(_ productId: String, completion: @escaping (_ result: PurchaseResultsState, _ success: Bool, _ message: String)  -> Void) {
         print("EasyPurchase purchasing product with id: \(productId)")
         
-        
+#if DEBUG
         if isSkipPurchaseValidation {
             setUser(true, isLifetimeSubscription: false)
             completion(.purchased, true, "Purchase Succeeded"~)
             return
         }
+#endif
         
         SwiftyStoreKit.purchaseProduct(productId, quantity: 1, atomically: true) { result in
             switch result {
