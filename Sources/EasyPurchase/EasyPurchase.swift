@@ -23,6 +23,7 @@ public final class EasyPurchase: ObservableObject {
     private var defaultOfferId: String?
     private var offerIds = [String]()
     private var allProductIds = [String]()
+    private var isSkipPurchaseValidation = false
     
     private init() { }
     
@@ -32,7 +33,8 @@ public final class EasyPurchase: ObservableObject {
         lifetimeProductId: String?,
         defaultOfferId: String,
         offerIds: [String],
-        allProductIds: [String]
+        allProductIds: [String],
+        isSkipPurchaseValidation: Bool = false
     ) {
         Tracker.configure(with: appstoreId)
         
@@ -43,6 +45,7 @@ public final class EasyPurchase: ObservableObject {
         self.defaultOfferId = defaultOfferId
         self.offerIds = offerIds
         self.allProductIds = allProductIds
+        self.isSkipPurchaseValidation = isSkipPurchaseValidation
         
         getProducts()
         completeTransactions()
@@ -97,7 +100,7 @@ public final class EasyPurchase: ObservableObject {
         let appleValidator = AppleReceiptValidator(service: .production,
                                                    sharedSecret: secretKey)
 #endif
-        
+       
         SwiftyStoreKit.verifyReceipt(using: appleValidator) { result in
             switch result {
             case .success(let receipt):
@@ -267,6 +270,13 @@ public extension EasyPurchase {
     
     private func purchase(_ productId: String, completion: @escaping (_ result: PurchaseResultsState, _ success: Bool, _ message: String)  -> Void) {
         print("EasyPurchase purchasing product with id: \(productId)")
+        
+        
+        if isSkipPurchaseValidation {
+            setUser(true, isLifetimeSubscription: false)
+            completion(.purchased, true, "Purchase Succeeded"~)
+            return
+        }
         
         SwiftyStoreKit.purchaseProduct(productId, quantity: 1, atomically: true) { result in
             switch result {
