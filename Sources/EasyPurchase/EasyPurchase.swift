@@ -17,6 +17,7 @@ public final class EasyPurchase: ObservableObject {
     @Published public var isLifetimeSubscription: Bool = false
     @Published public var offers: [Offer] = []
     @Published public var defaultOffer: Offer?
+    @Published public var purchasedProducts = [String]()
     
     private var secretKey: String = ""
     private var lifetimeProductId: String?
@@ -40,6 +41,7 @@ public final class EasyPurchase: ObservableObject {
         
         self.isSubscribed = (Storage.getFromDefaults(.isSubscribed) ?? false)
         self.isLifetimeSubscription = (Storage.getFromDefaults(.isLifetimeSubscription) ?? false)
+        self.purchasedProducts = (Storage.loadAsData(for: .purchasedProducts) ?? [])
         self.secretKey = secretKey
         self.lifetimeProductId = lifetimeProductId
         self.defaultOfferId = defaultOfferId
@@ -106,15 +108,17 @@ public final class EasyPurchase: ObservableObject {
             case .success(let receipt):
                 var isPurchased = false
                 var isLifetimeSubscription = false
+                var purchasedIds = [String]()
                 
                 // Verify the IAP
                 if let productId = self.lifetimeProductId {
                     let iapResult = SwiftyStoreKit.verifyPurchase(productId: productId, inReceipt: receipt)
                     
                     switch iapResult {
-                    case .purchased(_):
+                    case .purchased(let item):
                         isPurchased = true
                         isLifetimeSubscription = true
+                        purchasedIds.append(item.productId)
                     case .notPurchased:
                         print("EasyPurchase Lifetime is not Purchased")
                     }
@@ -128,8 +132,9 @@ public final class EasyPurchase: ObservableObject {
                 )
                 
                 switch subscriptionResult {
-                case .purchased(let expiryDate, _):
+                case .purchased(let expiryDate, let items):
                     isPurchased = true
+                    purchasedIds.append(contentsOf: items.map(\.productId))
                     print("EasyPurchase Product is valid until \(expiryDate)\n")
                 case .notPurchased:
                     print("EasyPurchase Product is not Purchased")
@@ -138,7 +143,7 @@ public final class EasyPurchase: ObservableObject {
                 }
                 
                 DispatchQueue.main.async {
-                    self.setUser(isPurchased, isLifetimeSubscription: isLifetimeSubscription)
+                    self.setUser(isPurchased, isLifetimeSubscription: isLifetimeSubscription, purchasedProducts: purchasedIds)
                     completion(receipt)
                 }
                 
@@ -151,12 +156,14 @@ public final class EasyPurchase: ObservableObject {
         }
     }
     
-    private func setUser(_ isSubscribed: Bool, isLifetimeSubscription: Bool) {
+    private func setUser(_ isSubscribed: Bool, isLifetimeSubscription: Bool, purchasedProducts: [String]) {
         Storage.saveInDefaults(isSubscribed, by: .isSubscribed)
         Storage.saveInDefaults(isLifetimeSubscription, by: .isLifetimeSubscription)
+        Storage.saveInDefaults(purchasedProducts, by: .purchasedProducts)
         
         self.isSubscribed = isSubscribed
         self.isLifetimeSubscription = isLifetimeSubscription
+        self.purchasedProducts = purchasedProducts
     }
 
     private func completeTransactions() {
@@ -273,7 +280,7 @@ public extension EasyPurchase {
         
 #if DEBUG
         if isSkipPurchaseValidation {
-            setUser(true, isLifetimeSubscription: false)
+            setUser(true, isLifetimeSubscription: false, purchasedProducts: [])
             completion(.purchased, true, "Purchase Succeeded"~)
             return
         }
