@@ -11,10 +11,10 @@ import AdSupport
 import Network
 import StoreKit
 import SwiftyStoreKit
-import AdServices
 
-//#if canImport(UIKit)
-//import UIKit
+#if !os(tvOS)
+import AdServices
+#endif
 
 protocol TrackServiceProtocol {
     static func configure(with appstoreId: String)
@@ -189,7 +189,13 @@ enum Tracker: TrackServiceProtocol {
 #endif
        
        func getAttribution() {
-           if let attributionToken = try? AAAttribution.attributionToken() {
+           var attributionToken: String?
+           
+#if !os(tvOS)
+           attributionToken = try? AAAttribution.attributionToken()
+#endif
+           
+           if let attributionToken {
                DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
                    let request = NSMutableURLRequest(url: URL(string:"https://api-adservices.apple.com/api/v1/")!)
                    request.httpMethod = "POST"
