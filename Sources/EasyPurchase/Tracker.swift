@@ -306,7 +306,7 @@ fileprivate extension Bundle {
 
 fileprivate extension Locale {
     var countryCode: String {
-        if #available(iOS 16, macOS 13, *) {
+        if #available(iOS 16, macOS 13, tvOS 16, *) {
             return self.language.region?.identifier ?? ""
         } else {
             return self.regionCode  ?? ""
