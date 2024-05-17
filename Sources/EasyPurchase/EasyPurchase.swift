@@ -13,6 +13,8 @@ import SwiftyStoreKit
 public final class EasyPurchase: ObservableObject {
     public static let shared = EasyPurchase()
     
+    @Published public var isPurchasesVerified: Bool = false
+    
     @Published public var isSubscribed: Bool = false
     @Published public var isLifetimeSubscription: Bool = false
     @Published public var offers: [Offer] = []
@@ -164,6 +166,7 @@ public final class EasyPurchase: ObservableObject {
         self.isSubscribed = isSubscribed
         self.isLifetimeSubscription = isLifetimeSubscription
         self.purchasedProducts = purchasedProducts
+        self.isPurchasesVerified = true
     }
 
     private func completeTransactions() {
