@@ -21,4 +21,26 @@ struct UserSetups: DictionaryConvertable {
     let device: String?
     let locale: String?
     let countryCode: String?
+    
+    var attributionRecords: AttributionRecords? = nil
+}
+
+extension UserSetups {
+    struct AttributionRecords: DictionaryConvertable {
+        let attribution: Bool
+        let campaignId: Int
+        let countryOrRegion: String
+        
+        let orgId: Int?
+        let adGroupId: Int?
+        let conversionType: String?
+        let clickDate: String?
+        let keywordId: Int?
+        let creativeSetId: Int?
+        let keywordName: String?
+        let organizationId: Int?
+        let region: String?
+        let campaignName: String?
+        let adGroupName: String?
+    }
 }

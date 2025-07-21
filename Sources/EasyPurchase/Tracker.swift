@@ -67,10 +67,15 @@ enum Tracker: TrackServiceProtocol {
                 countryCode: Locale.current.countryCode
             )
             
-            handleAttribution { param in
-                userSetups.attribution = param?.attribution
-                userSetups.campaignId = param?.campaignId
-                userSetups.campaignRegion = param?.campaignRegion
+            handleAttribution { records in
+                userSetups.attribution = records?.attribution
+                
+                if let campaignId = records?.campaignId {
+                    userSetups.campaignId = String(campaignId)
+                }
+                
+                userSetups.campaignRegion = records?.countryOrRegion
+                userSetups.attributionRecords = records
                 send(userSetups, to: .configure)
             }
         }
@@ -177,10 +182,7 @@ enum Tracker: TrackServiceProtocol {
         }
     }
     
-   private static func handleAttribution(completion: @escaping ((attribution: Bool,
-                                                          campaignId: String,
-                                                          campaignRegion: String)?) -> Void
-   ) {
+    private static func handleAttribution(completion: @escaping (UserSetups.AttributionRecords?) -> Void) {
        
 #if targetEnvironment(simulator)
        completion(nil)
@@ -197,21 +199,25 @@ enum Tracker: TrackServiceProtocol {
            
            if let attributionToken {
                DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
-                   let request = NSMutableURLRequest(url: URL(string:"https://api-adservices.apple.com/api/v1/")!)
+                   guard let url = URL(string:"https://api-adservices.apple.com/api/v1/") else {
+                       completion(nil)
+                       return
+                   }
+                   
+                   let request = NSMutableURLRequest(url: url)
                    request.httpMethod = "POST"
                    request.setValue("text/plain", forHTTPHeaderField: "Content-Type")
                    request.httpBody = Data(attributionToken.utf8)
                    
                    let task = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
+                       let decoder = JSONDecoder()
+                       decoder.keyDecodingStrategy = .useDefaultKeys
+                       
                        if let data,
-                          let result = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String:Any],
-                          let attribution = result["attribution"] as? Bool,
-                          let campaignId = result["campaignId"] as? Int,
-                          let countryOrRegion = result["countryOrRegion"] as? String,
-                          campaignId != 1234567890 {
-                           completion((attribution: attribution,
-                                       campaignId: "\(campaignId)",
-                                       campaignRegion: countryOrRegion))
+                          let result = try? decoder.decode(UserSetups.AttributionRecords.self, from: data),
+                          result.campaignId != 1234567890 {
+                           completion(result)
+                           return
                        }
                        
                        completion(nil)
